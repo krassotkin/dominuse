@@ -1,0 +1,9 @@
+*.a
+*.bin
+*.o
+*.swm
+*.swn
+*.swo
+*.swp
+.vscode
+dominuse
