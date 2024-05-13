@@ -8,7 +8,6 @@ run:
 */
 
 #include <algorithm> // for std::remove_if
-#include <filesystem> // exists, is_regular_file
 #include <fstream> // std::ifstream, std::ofstream
 #include <iostream> // std::cout, std::endl
 #include <string> // std::string
@@ -41,7 +40,7 @@ Examples:
  ./dominuse --ip dominuse.com cheat-sheets.org krassotkin.com
  ./dominuse --input input_domain_list.txt --output output_domain_list.txt
 )""";
-const std::string versionDomainuse = "20240511.20240512";
+const std::string versionDomainuse = "20240511.20240513";
 
 std::string inputFileName;
 bool isHelp = false;
@@ -66,16 +65,8 @@ int checkFileName(const std::string& fileName) {
   return 1;
  }
  if(fileName.find_first_of("/\\:*?\"<>|") != std::string::npos) {
-  std::cout << "Error: invalid file name " << fileName << std::endl;
+  std::cout << "Error: invalid file name \"" << fileName << "\"." << std::endl;
   return 2;
- }
- if(!std::filesystem::exists(inputFileName)) {
-  std::cout << "Error: can't open file " << inputFileName << std::endl;
-  return 3;
- }
- if(!std::filesystem::is_regular_file(inputFileName)) {
-  std::cout << "Error: can't open file " << inputFileName << std::endl;
-  return 4;
  }
  return 0;
 }
@@ -97,7 +88,7 @@ int loadFromFile() {
  if(checkFileStatus != 0) return checkFileStatus;
  std::ifstream inputFile(inputFileName);
  if(!inputFile.is_open()) {
-  std::cout << "Error: can't open file " << inputFileName << std::endl;
+  std::cout << "Error: can't open input file \"" << inputFileName << "\"." << std::endl;
   return 1;
  }
  std::string domain;
@@ -117,10 +108,14 @@ void parseArgs(int argc, char *argv[]) {
   std::string arg = argv[i];
   if(fromFile) {
    inputFileName = arg;
+   trim(inputFileName);
+   if(inputFileName.empty()) std::cout << "Warning: empty input file name." << std::endl;
    fromFile = false;
    continue;
   } else if(toFile) {
    outputFileName = arg;
+   trim(outputFileName);
+   if(outputFileName.empty()) std::cout << "Warning: empty output file name." << std::endl;
    toFile = false;
    continue;
   }
@@ -157,7 +152,7 @@ int saveToFile(const std::string& data) {
  if(checkFileStatus != 0) return checkFileStatus;
  std::ofstream outputFile(outputFileName);
  if(!outputFile.is_open()) {
-  std::cout << "Error: can't open file " << outputFileName << std::endl;
+  std::cout << "Error: can't open output file \"" << outputFileName << "\"." << std::endl;
   return 1;
  }
  outputFile << data;
@@ -183,7 +178,7 @@ int main(int argc, char *argv[]) {
  }
  if(!inputFileName.empty()) loadFromFile();
  if(domains.empty()) {
-  std::cout << "Error: empty domain name" << std::endl;
+  std::cout << "Error: no domains found." << std::endl;
   return 1;
  }
  std::string result;
@@ -209,6 +204,12 @@ int main(int argc, char *argv[]) {
   if(outputFileName.empty()) std::cout << line << std::endl;
   else result += line + "\n";
  }
- if(!outputFileName.empty()) return saveToFile(result);
+ if(!outputFileName.empty()) {
+  const int st = saveToFile(result);
+  if(st != 0) {
+   std::cout << "Error (" << st << "): can't save file \"" << outputFileName << "\"." << std::endl;
+   return st;
+  }
+ }
  return 0;
 }
