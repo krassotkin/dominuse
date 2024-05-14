@@ -1,19 +1,22 @@
 /*
 name: domainuse.cpp
 description: Dominuse (domain in use) is a command line tool for quickly checking domain usage.
+author: Alexander Krassotkin (krassotkin.com)
+created: 2024-05-11T16:10:00Z
+modified: 2024-05-14T09:25:08Z
 compilation: 
 g++ -O3 -Wall -Wextra dominuse.cpp -o dominuse
 run:
 ./dominuse
 */
 
-#include <algorithm> // for std::remove_if
 #include <fstream> // std::ifstream, std::ofstream
 #include <iostream> // std::cout, std::endl
 #include <string> // std::string
 #include <vector> // std::vector
 
-#include "resolver.hpp" // resolve
+#include "resolver.hpp" // domainuse::resolve
+#include "utils.hpp" // domainuse::*: isDomain, trim
 
 const std::string aboutDomainuse = "dominuse (domain in use) is a command line tool that allows you to quickly check if a domain is unavailable for registration by checking its IP address.";
 const std::string usageDomainuse = R"""(Usage: 
@@ -53,11 +56,9 @@ bool showNotUsed = false;
 bool showNonDomains = false;
 
 int checkFileName(const std::string& fileName);
-bool isDomain(const std::string& domain);
 int loadFromFile();
 void parseArgs(int argc, char *argv[]);
 int saveToFile(const std::string& data);
-void trim(std::string& str);
 
 int checkFileName(const std::string& fileName) {
  if(fileName.empty()) {
@@ -71,18 +72,6 @@ int checkFileName(const std::string& fileName) {
  return 0;
 }
 
-bool isDomain(const std::string& domain) {
- if(domain.empty()) return false;
- if(domain.find_first_of("/\\:*?\"<>|") != std::string::npos) return false;
- if(domain.size() < 2) return false;
- if(domain[0] == '.') return false;
- if(domain[domain.size() - 1] == '.') return false;
- size_t firstPoint = domain.find('.');
- if(firstPoint == std::string::npos) return false;
- if(domain.size() - firstPoint < 2) return false;
- return true;
-}
-
 int loadFromFile() {
  const int checkFileStatus = checkFileName(inputFileName);
  if(checkFileStatus != 0) return checkFileStatus;
@@ -93,7 +82,7 @@ int loadFromFile() {
  }
  std::string domain;
  while(std::getline(inputFile, domain)) {
-  trim(domain);
+  dominuse::trim(domain);
   if(domain.empty()) continue;
   domains.push_back(domain);
  }
@@ -108,13 +97,13 @@ void parseArgs(int argc, char *argv[]) {
   std::string arg = argv[i];
   if(fromFile) {
    inputFileName = arg;
-   trim(inputFileName);
+   dominuse::trim(inputFileName);
    if(inputFileName.empty()) std::cout << "Warning: empty input file name." << std::endl;
    fromFile = false;
    continue;
   } else if(toFile) {
    outputFileName = arg;
-   trim(outputFileName);
+   dominuse::trim(outputFileName);
    if(outputFileName.empty()) std::cout << "Warning: empty output file name." << std::endl;
    toFile = false;
    continue;
@@ -136,7 +125,7 @@ void parseArgs(int argc, char *argv[]) {
   } else if(arg == "--ip") {
    isIP = true;
   } else {
-   trim(arg);
+   dominuse::trim(arg);
    if(arg.empty()) continue;
    domains.push_back(arg);
   }
@@ -160,10 +149,6 @@ int saveToFile(const std::string& data) {
  return 0;
 }
 
-void trim(std::string& str) {
- str.erase(std::remove_if(str.begin(), str.end(), [](char c) {return std::isspace(c);}), str.end());
-}
-
 int main(int argc, char *argv[]) {
  if(argc == 1) isHelp = true;
  else parseArgs(argc, argv);
@@ -183,7 +168,7 @@ int main(int argc, char *argv[]) {
  }
  std::string result;
  for(std::string domain : domains) {
-  if(!isDomain(domain)) {
+  if(!dominuse::isDomain(domain)) {
    if(showNonDomains) {
     std::string line = domain + " is not a domain";
     if(outputFileName.empty()) std::cout << line << std::endl;
@@ -191,7 +176,7 @@ int main(int argc, char *argv[]) {
    }
    continue;
   }
-  const std::string ip = resolve(domain);
+  const std::string ip = dominuse::resolve(domain);
   if(showUsed && !showNotUsed && ip.empty()) continue;
   if(showNotUsed && !showUsed && !ip.empty()) continue;
   std::string line = domain + " ";

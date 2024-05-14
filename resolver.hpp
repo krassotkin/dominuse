@@ -1,3 +1,11 @@
+/*
+name: resolver.hpp
+description: Resolve a domain name to an IP address.
+author: Alexander Krassotkin (krassotkin.com)
+created: 2024-05-11T16:10:00Z
+modified: 2024-05-14T09:17:25Z
+*/
+
 #pragma once
 #ifndef DOMAINUSE_RESOLVER_HPP
 #define DOMAINUSE_RESOLVER_HPP
@@ -6,6 +14,8 @@
 #include <cstring>
 #include <netdb.h>
 #include <sys/socket.h>
+
+namespace dominuse {
 
 /**
  @brief Resolve a domain name to an IP address.
@@ -33,5 +43,7 @@ std::string resolve(const std::string& domain) {
  freeaddrinfo(result);
  return ipstr;
 }
+
+} // dominuse
 
 #endif // #ifndef DOMAINUSE_RESOLVER_HPP
