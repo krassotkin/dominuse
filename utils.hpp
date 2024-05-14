@@ -7,8 +7,8 @@ modified: 2024-05-14T09:17:09Z
 */
 
 #pragma once
-#ifndef DOMAINUSE_UTILS_HPP
-#define DOMAINUSE_UTILS_HPP
+#ifndef DOMINUSE_UTILS_HPP
+#define DOMINUSE_UTILS_HPP
 
 #include <algorithm> // for std::remove_if
 #include <iostream> // std::cout, std::endl
@@ -34,4 +34,4 @@ void trim(std::string& str) {
 
 } // dominuse
 
-#endif // #ifndef DOMAINUSE_UTILS_HPP
+#endif // #ifndef DOMINUSE_UTILS_HPP

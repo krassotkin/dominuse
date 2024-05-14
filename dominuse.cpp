@@ -1,5 +1,5 @@
 /*
-name: domainuse.cpp
+name: dominuse.cpp
 description: Dominuse (domain in use) is a command line tool for quickly checking domain usage.
 author: Alexander Krassotkin (krassotkin.com)
 created: 2024-05-11T16:10:00Z
@@ -15,11 +15,11 @@ run:
 #include <string> // std::string
 #include <vector> // std::vector
 
-#include "resolver.hpp" // domainuse::resolve
-#include "utils.hpp" // domainuse::*: isDomain, trim
+#include "resolver.hpp" // dominuse::resolve
+#include "utils.hpp" // dominuse::*: isDomain, trim
 
-const std::string aboutDomainuse = "dominuse (domain in use) is a command line tool that allows you to quickly check if a domain is unavailable for registration by checking its IP address.";
-const std::string usageDomainuse = R"""(Usage: 
+const std::string aboutDominuse = "dominuse (domain in use) is a command line tool that allows you to quickly check if a domain is unavailable for registration by checking its IP address.";
+const std::string usageDominuse = R"""(Usage: 
  dominuse [options] [<domain_name>]...
 
 Options:
@@ -43,7 +43,7 @@ Examples:
  ./dominuse --ip dominuse.com cheat-sheets.org krassotkin.com
  ./dominuse --input input_domain_list.txt --output output_domain_list.txt
 )""";
-const std::string versionDomainuse = "20240511.20240513";
+const std::string versionDominuse = "20240511.20240513";
 
 std::string inputFileName;
 bool isHelp = false;
@@ -153,12 +153,12 @@ int main(int argc, char *argv[]) {
  if(argc == 1) isHelp = true;
  else parseArgs(argc, argv);
  if(isHelp) {
-  std::cout << std::endl << aboutDomainuse << std::endl << std::endl;
-  std::cout << usageDomainuse << std::endl << std::endl;
+  std::cout << std::endl << aboutDominuse << std::endl << std::endl;
+  std::cout << usageDominuse << std::endl << std::endl;
   return 0;
  }
  if(isVersion) {
-  std::cout << versionDomainuse << std::endl;
+  std::cout << versionDominuse << std::endl;
   return 0;
  }
  if(!inputFileName.empty()) loadFromFile();

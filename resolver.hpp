@@ -7,8 +7,8 @@ modified: 2024-05-14T09:17:25Z
 */
 
 #pragma once
-#ifndef DOMAINUSE_RESOLVER_HPP
-#define DOMAINUSE_RESOLVER_HPP
+#ifndef DOMINUSE_RESOLVER_HPP
+#define DOMINUSE_RESOLVER_HPP
 
 #include <arpa/inet.h> // inet_ntop
 #include <cstring>
@@ -46,4 +46,4 @@ std::string resolve(const std::string& domain) {
 
 } // dominuse
 
-#endif // #ifndef DOMAINUSE_RESOLVER_HPP
+#endif // #ifndef DOMINUSE_RESOLVER_HPP
