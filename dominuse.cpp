@@ -3,20 +3,21 @@ name: dominuse.cpp
 description: Dominuse (domain in use) is a command line tool for quickly checking domain usage.
 author: Alexander Krassotkin (krassotkin.com)
 created: 2024-05-11T16:10:00Z
-modified: 2024-05-14T09:25:08Z
+modified: 2024-06-12T09:27:47Z
+version: 202406122806
 compilation: 
 g++ -O3 -Wall -Wextra dominuse.cpp -o dominuse
 run:
 ./dominuse
 */
 
-#include <fstream> // std::ifstream, std::ofstream
-#include <iostream> // std::cout, std::endl
-#include <string> // std::string
-#include <vector> // std::vector
+#include <fstream> // for std::ifstream, std::ofstream
+#include <iostream> // for std::cout, std::endl
+#include <string> // for std::string
+#include <vector> // for std::vector
 
-#include "resolver.hpp" // dominuse::resolve
-#include "utils.hpp" // dominuse::*: isDomain, trim
+#include "resolver.hpp" // for dominuse::resolve
+#include "utils.hpp" // for dominuse::* (isDomain, trim)
 
 const std::string aboutDominuse = "dominuse (domain in use) is a command line tool that allows you to quickly check if a domain is unavailable for registration by checking its IP address.";
 const std::string usageDominuse = R"""(Usage: 
@@ -43,7 +44,7 @@ Examples:
  ./dominuse --ip dominuse.com cheat-sheets.org krassotkin.com
  ./dominuse --input input_domain_list.txt --output output_domain_list.txt
 )""";
-const std::string versionDominuse = "20240511.20240513";
+const std::string versionDominuse = "202406122806";
 
 std::string inputFileName;
 bool isHelp = false;

@@ -2,16 +2,17 @@
 name: resolver.hpp
 description: Resolve a domain name to an IP address.
 author: Alexander Krassotkin (krassotkin.com)
+version: 202406011329
 created: 2024-05-11T16:10:00Z
-modified: 2024-05-14T09:17:25Z
+modified: 2024-06-01T10:31:17Z
 */
 
 #pragma once
 #ifndef DOMINUSE_RESOLVER_HPP
 #define DOMINUSE_RESOLVER_HPP
 
-#include <arpa/inet.h> // inet_ntop
-#include <cstring>
+#include <arpa/inet.h> // for inet_ntop
+#include <cstring> // for std::memset
 #include <netdb.h>
 #include <sys/socket.h>
 
